@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.utils import timezone
+from .forms import CommentForm
 
 from .models import Board, Comment
 
@@ -34,7 +35,7 @@ class BoardDetailView(View):
     context = {
         'board': Board.objects.all()
     }
-    def get(self, request,board_id, *args, **kwargs):
+    def get(self, request, board_id, *args, **kwargs):
         '''
         GETリクエスト用のメソッド
         *argsと**kwargsを引数にとるが、こいつらの存在意義がよくわかっていない。
@@ -42,12 +43,35 @@ class BoardDetailView(View):
         '''
         board = get_object_or_404(Board, pk=board_id)
         comments = board.comment_set.all().order_by('remark_date')
+        form = CommentForm(request.POST)
+        form.board_id = board_id
         context = {
             'board': board,
             'comments': comments,
+            'form': form,
         }
         return render(request, 'bulletinBoard/detail.html', context)
 
+    def post(self, request, board_id, *args, **kwargs):
+        '''
+
+        :param request:
+        :param board_id:
+        :param args:
+        :param kwargs:
+        :return:
+        '''
+        form = CommentForm(request.POST)
+        is_valid = form.is_valid()
+        board = get_object_or_404(Board, pk=board_id)
+        comments = board.comment_set.all().order_by('remark_date')
+        context = {
+            'board': board,
+            'comments': comments,
+            'form': form,
+        }
+        if not is_valid:
+            return render(request, 'bulletinBoard/detail.html', context)
 
 index = BoardIndexView.as_view()
 detail = BoardDetailView.as_view()

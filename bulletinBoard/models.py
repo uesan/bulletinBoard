@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -15,7 +16,7 @@ class Board(models.Model):
 
     '''
     title = models.CharField(max_length = 200)
-    pub_date = models.DateTimeField('dete published')
+    pub_date = models.DateTimeField('dete published', default=timezone.now())
 
     def __str__(self):
         return self.title
@@ -33,7 +34,7 @@ class Comment(models.Model):
 
     '''
     text = models.TextField(max_length = 400)
-    remark_date = models.DateTimeField('date remarked')
+    remark_date = models.DateTimeField('date remarked', default=timezone.now())
     board = models.ForeignKey(Board, on_delete = models.CASCADE)
 
     def __str__(self):

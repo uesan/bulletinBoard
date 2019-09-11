@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.utils import timezone
-from .forms import CommentForm
+from .forms import CommentForm, BoardForm
 
 from .models import Board, Comment
 
@@ -25,6 +25,11 @@ class BoardIndexView(View):
         *argsと**kwargsを引数にとるが、こいつらの存在意義がよくわかっていない。
         リクエスト以外でのデータや文字列の受け取りが発生する・・・？
         '''
+        form = BoardForm(request.POST)
+        context = {
+            'form': form,
+            'latest_board_list': Board.objects.all(),
+        }
 
         return render(request, 'bulletinBoard/index.html', self.context)
 

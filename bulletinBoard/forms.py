@@ -26,3 +26,11 @@ class CommentForm(ModelForm):
         except:
             raise forms.ValidationError("コメント投稿できませんでした")
 """
+
+class BoardForm(ModelForm):
+    '''
+    スレッド投稿フォーム
+    '''
+    class Meta:
+        model = Board
+        fields = ['title',]

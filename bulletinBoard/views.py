@@ -62,7 +62,7 @@ class BoardDetailView(View):
         :return:
         '''
         form = CommentForm(request.POST)
-        is_valid = form.is_valid()
+        new_comment = form.save()
         board = get_object_or_404(Board, pk=board_id)
         comments = board.comment_set.all().order_by('remark_date')
         context = {
@@ -70,8 +70,7 @@ class BoardDetailView(View):
             'comments': comments,
             'form': form,
         }
-        if not is_valid:
-            return render(request, 'bulletinBoard/detail.html', context)
+        return render(request, 'bulletinBoard/detail.html', context)
 
 index = BoardIndexView.as_view()
 detail = BoardDetailView.as_view()

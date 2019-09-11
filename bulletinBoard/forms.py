@@ -1,17 +1,17 @@
-from django import forms
+from django.forms import ModelForm
 from .models import Board, Comment
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-class CommentForm(forms.Form):
+class CommentForm(ModelForm):
     '''
     コメント投稿用フォーム
     '''
-    board_id = 0
-    text = forms.CharField(
-        label='コメント本文',
-    )
+    class Meta:
+        model = Comment
+        fields = ['text', 'board']
 
+"""
     def clean(self):
         new_text = self.cleaned_data.get('text')
         print(new_text)
@@ -25,4 +25,4 @@ class CommentForm(forms.Form):
 
         except:
             raise forms.ValidationError("コメント投稿できませんでした")
-
+"""

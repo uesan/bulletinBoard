@@ -33,6 +33,7 @@ class Comment(models.Model):
 
     '''
     text = models.TextField(max_length = 400)
+    remark_date = models.DateTimeField('date remarked')
     board = models.ForeignKey(Board, on_delete = models.CASCADE)
 
     def __str__(self):

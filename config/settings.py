@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts.apps.AccountsConfig',
     'bulletinBoard.apps.BulletinboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',

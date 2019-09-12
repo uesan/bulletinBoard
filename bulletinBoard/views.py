@@ -1,5 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 from django.utils import timezone
 from django.urls import reverse
@@ -40,8 +39,9 @@ class BoardIndexView(View):
         '''
         form = BoardForm(request.POST)
         if form.is_valid():
-            form.save()
-        return HttpResponseRedirect(reverse('bulletinBoard:index',))
+            new_board = form.save()
+            return redirect(reverse('bulletinBoard:detail', args=(new_board.id,)))
+        return redirect(reverse('bulletinBoard:index'))
 
 
 class BoardDetailView(View):
@@ -81,7 +81,7 @@ class BoardDetailView(View):
         form = CommentForm(request.POST, instance=new_instance)
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect(reverse('bulletinBoard:detail', args=(board_id,)))
+        return redirect(reverse('bulletinBoard:detail', args=(board_id,)))
 
 index = BoardIndexView.as_view()
 detail = BoardDetailView.as_view()

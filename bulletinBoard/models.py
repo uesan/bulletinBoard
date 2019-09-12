@@ -16,7 +16,7 @@ class Board(models.Model):
 
     '''
     title = models.CharField(max_length = 200)
-    pub_date = models.DateTimeField('dete published', default=timezone.now())
+    pub_date = models.DateTimeField('dete published', default=timezone.now(), db_index=True)
 
     def __str__(self):
         return self.title
@@ -33,9 +33,9 @@ class Comment(models.Model):
         どの「板」のコメントかを判断する変数
 
     '''
-    text = models.TextField(max_length = 400)
-    remark_date = models.DateTimeField('date remarked', default=timezone.now())
-    board = models.ForeignKey(Board, on_delete = models.CASCADE)
+    text = models.TextField(max_length=400)
+    remark_date = models.DateTimeField('date remarked', default=timezone.now(), db_index=True)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.text

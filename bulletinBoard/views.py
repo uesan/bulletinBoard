@@ -1,7 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.utils import timezone
+from django.urls import reverse
 from .forms import CommentForm, BoardForm
 
 from .models import Board, Comment
@@ -14,10 +15,6 @@ class BoardIndexView(View):
     '''
     掲示板の一覧を表示するViewになる（予定）
     '''
-    #context_object_name = 'latest_board_list'
-    context = {
-        'latest_board_list': Board.objects.all()
-    }
 
     def get(self, request, *args, **kwargs):
         '''
@@ -28,10 +25,24 @@ class BoardIndexView(View):
         form = BoardForm(request.POST)
         context = {
             'form': form,
-            'latest_board_list': Board.objects.all(),
+            'latest_board_list': Board.objects.all().order_by('pub_date'),
         }
 
-        return render(request, 'bulletinBoard/index.html', self.context)
+        return render(request, 'bulletinBoard/index.html', context)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        POSTリクエスト用のメソッド
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        '''
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('bulletinBoard:index',))
+
 
 class BoardDetailView(View):
     '''
@@ -46,12 +57,11 @@ class BoardDetailView(View):
         *argsと**kwargsを引数にとるが、こいつらの存在意義がよくわかっていない。
         リクエスト以外でのデータや文字列の受け取りが発生する・・・？
         '''
-        board = get_object_or_404(Board, pk=board_id)
-        comments = board.comment_set.all().order_by('remark_date')
+        current_board = get_object_or_404(Board, pk=board_id)
+        comments = current_board.comment_set.all().order_by('remark_date')
         form = CommentForm(request.POST)
-        form.board_id = board_id
         context = {
-            'board': board,
+            'board': current_board,
             'comments': comments,
             'form': form,
         }
@@ -66,16 +76,12 @@ class BoardDetailView(View):
         :param kwargs:
         :return:
         '''
-        form = CommentForm(request.POST)
-        new_comment = form.save()
-        board = get_object_or_404(Board, pk=board_id)
-        comments = board.comment_set.all().order_by('remark_date')
-        context = {
-            'board': board,
-            'comments': comments,
-            'form': form,
-        }
-        return render(request, 'bulletinBoard/detail.html', context)
+        current_board = get_object_or_404(Board, pk=board_id)
+        new_instance = Comment(board=current_board)
+        form = CommentForm(request.POST, instance=new_instance)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('bulletinBoard:detail', args=(board_id,)))
 
 index = BoardIndexView.as_view()
 detail = BoardDetailView.as_view()

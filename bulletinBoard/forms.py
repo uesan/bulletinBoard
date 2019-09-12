@@ -9,7 +9,7 @@ class CommentForm(ModelForm):
     '''
     class Meta:
         model = Comment
-        fields = ['text', 'board']
+        fields = ['text',]
 
 """
     def clean(self):
@@ -33,4 +33,4 @@ class BoardForm(ModelForm):
     '''
     class Meta:
         model = Board
-        fields = ['title',]
+        fields = ['title']

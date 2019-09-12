@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 from django.utils import timezone
+from django.conf import settings
 from django.urls import reverse
 from .forms import CommentForm, BoardForm
 
@@ -21,7 +22,8 @@ class BoardIndexView(View):
         *argsと**kwargsを引数にとるが、こいつらの存在意義がよくわかっていない。
         リクエスト以外でのデータや文字列の受け取りが発生する・・・？
         '''
-        form = BoardForm(request.POST)
+
+        form = BoardForm()
         context = {
             'form': form,
             'latest_board_list': Board.objects.all().order_by('pub_date'),
@@ -37,11 +39,21 @@ class BoardIndexView(View):
         :param kwargs:
         :return:
         '''
+
         form = BoardForm(request.POST)
+
+        if not request.user.is_authenticated:
+            return redirect(settings.LOGIN_REDIRECT_URL)
+
         if form.is_valid():
             new_board = form.save()
             return redirect(reverse('bulletinBoard:detail', args=(new_board.id,)))
-        return redirect(reverse('bulletinBoard:index'))
+        else:
+            context = {
+            'form': form,
+            'latest_board_list': Board.objects.all().order_by('pub_date'),
+            }
+            return redirect(reverse('bulletinBoard:index'), context)
 
 
 class BoardDetailView(View):
@@ -59,7 +71,7 @@ class BoardDetailView(View):
         '''
         current_board = get_object_or_404(Board, pk=board_id)
         comments = current_board.comment_set.all().order_by('remark_date')
-        form = CommentForm(request.POST)
+        form = CommentForm()
         context = {
             'board': current_board,
             'comments': comments,
@@ -77,7 +89,7 @@ class BoardDetailView(View):
         :return:
         '''
         current_board = get_object_or_404(Board, pk=board_id)
-        new_instance = Comment(board=current_board)
+        new_instance = Comment(board=current_board, user=request.user)
         form = CommentForm(request.POST, instance=new_instance)
         if form.is_valid():
             form.save()

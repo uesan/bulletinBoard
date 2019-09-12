@@ -1,3 +1,8 @@
+{% extends "bulletinBoard/base.html" %}
+
+{% block page_title %}掲示板一覧{% endblock %}
+
+{% block content %}
 {% if latest_board_list %}
     <ul>
     {% for board in latest_board_list %}
@@ -36,6 +41,7 @@
         {% endfor %}
 
         {% csrf_token %}
-        <button type="submit" class="ui fluid teal submit button">スレッド作成</button>
+        <button type="submit" class="ui fluid teal submit button">スレッド作成（要ログイン）</button>
     </div>
 </form>
+{% endblock %}

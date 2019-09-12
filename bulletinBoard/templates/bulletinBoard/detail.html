@@ -1,9 +1,15 @@
+{% extends "bulletinBoard/base.html" %}
+
+{% block page_title %} {{  board.title }} {% endblock %}
+
+{% block content %}
 <h1>{{  board.title }}</h1>
 
 {% if comments %}
     <ul>
     {% for comment in comments %}
-        {{ forloop.counter }}. {{ comment.text }}<br>
+        {{ forloop.counter }}. {{ comment.remark_date }} | ユーザ名: {{ comment.user.username|default:'Anonymous User' }}<br>
+        {{ comment.text }}<br><br>
     {% endfor %}
     </ul>
 {% else %}
@@ -43,3 +49,4 @@
 </form>
 
 <li><a href="/bulletinBoard/">掲示板一覧に戻る</a></li>
+{% endblock %}

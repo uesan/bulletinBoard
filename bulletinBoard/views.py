@@ -42,8 +42,10 @@ class BoardIndexView(View):
 
         form = BoardForm(request.POST)
 
+        #"""
         if not request.user.is_authenticated:
-            return redirect(settings.LOGIN_REDIRECT_URL)
+            return redirect(settings.LOGIN_URL)
+        #"""
 
         if form.is_valid():
             new_board = form.save()
@@ -89,7 +91,10 @@ class BoardDetailView(View):
         :return:
         '''
         current_board = get_object_or_404(Board, pk=board_id)
-        new_instance = Comment(board=current_board, user=request.user)
+        if not request.user.is_authenticated:
+            new_instance = Comment(board=current_board)
+        else:
+            new_instance = Comment(board=current_board, user=request.user)
         form = CommentForm(request.POST, instance=new_instance)
         if form.is_valid():
             form.save()

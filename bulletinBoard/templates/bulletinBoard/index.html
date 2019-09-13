@@ -3,6 +3,40 @@
 {% block page_title %}掲示板一覧{% endblock %}
 
 {% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <h1>ウエサンの掲示板</h1>
+        <p>こんにちは、これはウエサンの掲示板です。様々な話題、ジャンル、時には相談など・・・なんでも皆さんで話してください！</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>スレッドタイトル</th>
+                <th>日時</th>
+            </tr>
+            </thead>
+            {% if latest_board_list %}
+            <tbody>
+            {% for board in latest_board_list %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="/bulletinBoard/{{ board.id }}/">{{ board.title }}</a></td>
+                <td>{{ board.pub_date }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            {% else %}
+            <p>No bulletin board are available.</p>
+            {% endif %}
+        </table>
+    </div>
+</div>
+<!--
 {% if latest_board_list %}
     <ul>
     {% for board in latest_board_list %}
@@ -12,9 +46,13 @@
 {% else %}
     <p>No bulletin board are available!</p>
 {% endif %}
+-->
 
 <form action="" method="post" class="ui form">
-    <div class="ui stacked segment">
+    {% bootstrap_form form %}
+    {% csrf_token %}
+    {% bootstrap_button "スレッド作成（要ログイン）" button_type="submit" button_class="btn-primary" %}
+    <!--div class="ui stacked segment">
         {# --- 全体エラーメッセージ --- #}
         {% if form.non_field_errors %}
         <div class="ui red message">
@@ -42,6 +80,6 @@
 
         {% csrf_token %}
         <button type="submit" class="ui fluid teal submit button">スレッド作成（要ログイン）</button>
-    </div>
+    </div-->
 </form>
 {% endblock %}

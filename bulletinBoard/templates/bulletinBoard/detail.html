@@ -3,21 +3,41 @@
 {% block page_title %} {{  board.title }} {% endblock %}
 
 {% block content %}
-<h1>{{  board.title }}</h1>
-
-{% if comments %}
-    <ul>
-    {% for comment in comments %}
-        {{ forloop.counter }}. {{ comment.remark_date }} | ユーザ名: {{ comment.user.username|default:'Anonymous User' }}<br>
-        {{ comment.text }}<br><br>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No comments exist in this board.</p>
-{% endif %}
+<h1><a>{{  board.title }}</a></h1>
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>名前</th>
+                <th>コメント内容</th>
+                <th>日時</th>
+            </tr>
+            </thead>
+            {% if comments %}
+            <tbody>
+            {% for comment in comments %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ comment.user.username|default:'名無し' }}</td>
+                <td>{{ comment.text }}</td>
+                <td>{{ comment.remark_date }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            {% else %}
+            <p>No comments exist in this board.</p>
+            {% endif %}
+        </table>
+    </div>
+</div>
 
 <form action="" method="post" class="ui form">
-    <div class="ui stacked segment">
+    {% bootstrap_form form %}
+    {% csrf_token %}
+    {% bootstrap_button "コメント投稿" button_type="submit" button_class="btn-primary" %}
+    <!--div class="ui stacked segment">
         {# --- 全体エラーメッセージ --- #}
         {% if form.non_field_errors %}
         <div class="ui red message">
@@ -42,11 +62,6 @@
             {% endif %}
         </div>
         {% endfor %}
-
-        {% csrf_token %}
-        <button type="submit" class="ui fluid teal submit button">コメント投稿</button>
-    </div>
+    </div-->
 </form>
-
-<li><a href="/bulletinBoard/">掲示板一覧に戻る</a></li>
 {% endblock %}

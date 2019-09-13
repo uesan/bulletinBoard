@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>ログイン</title>
-</head>
-<body>
+{% extends "bulletinBoard/base.html" %}
+
+{% block page_title %}ログイン{% endblock %}
+
+{% block content %}
+
 <form action="{% url 'accounts:login' %}" method="post" class="ui form">
-    <div class="ui stacked segment">
+    {% bootstrap_form form %}
+    {% csrf_token %}
+    {% bootstrap_button "ログイン" button_type="submit" button_class="btn-primary" %}
+    <!--div class="ui stacked segment">
         {# --- 全体エラーメッセージ --- #}
         {% if form.non_field_errors %}
         <div class="ui red message">
@@ -34,11 +36,11 @@
 
         {% csrf_token %}
         <button type="submit" class="ui fluid teal submit button">ログイン</button>
-    </div>
+    </div-->
 </form>
 
 <div class="ui message">
     <a href="{% url 'accounts:register' %}">新規ユーザー登録はこちら</a>
 </div>
-</body>
-</html>
+
+{% endblock %}

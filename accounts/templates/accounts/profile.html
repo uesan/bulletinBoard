@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>プロフィール更新</title>
-</head>
-<body>
+{% extends "bulletinBoard/base.html" %}
+
+{% block page_title %}プロフィール更新{% endblock %}
+
+{% block content %}
 <form action="" method="post" class="ui form">
-    <div class="ui stacked segment">
+    {% bootstrap_form form %}
+    {% csrf_token %}
+    {% bootstrap_button "プロフィール更新" button_type="submit" button_class="btn-primary" %}
+    <!--div class="ui stacked segment">
         {# --- 全体エラーメッセージ --- #}
         {% if form.non_field_errors %}
         <div class="ui red message">
@@ -34,7 +35,6 @@
 
         {% csrf_token %}
         <button type="submit" class="ui fluid teal submit button">更新</button>
-    </div>
+    </div-->
 </form>
-</body>
-</html>
+{% endblock %}

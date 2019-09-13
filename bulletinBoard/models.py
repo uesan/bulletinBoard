@@ -35,7 +35,7 @@ class Comment(models.Model):
 
     '''
     text = models.TextField(max_length=400)
-    remark_date = models.DateTimeField('date remarked', default=timezone.now(), db_index=True)
+    remark_date = models.DateTimeField('date remarked', auto_now_add=True, db_index=True)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
 

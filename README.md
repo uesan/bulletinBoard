@@ -11,7 +11,7 @@ readmeはテンプレを引っ張ってきたので、必要であれば加筆�
 
 ## Demo
 
-## VS. 
+## VS.
 
 ## Requirement
 macOS Mojave 10.14.5<br>
@@ -20,7 +20,13 @@ PyCharmCE with Anaconda plugin<br>
 
 ## Usage
 
+TODO
+
 ## Install
+
+```
+$ pip install requirements.txt
+```````
 
 ## Contribution
 

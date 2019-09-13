@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import User,AnonymousUser
 
 # Create your models here.
@@ -17,7 +16,7 @@ class Board(models.Model):
 
     '''
     title = models.CharField(max_length = 200)
-    pub_date = models.DateTimeField('dete published', default=timezone.now(), db_index=True)
+    pub_date = models.DateTimeField('dete published', auto_now_add=True, db_index=True)
 
     def __str__(self):
         return self.title

@@ -50,8 +50,8 @@ class BoardIndexView(View):
             return redirect(reverse('bulletinBoard:detail', args=(new_board.id,)))
         else:
             context = {
-            'form': form,
-            'latest_board_list': Board.objects.all().order_by('pub_date'),
+                'form': form,
+                'latest_board_list': Board.objects.all().order_by('pub_date'),
             }
             return redirect(reverse('bulletinBoard:index'), context)
 

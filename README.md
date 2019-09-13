@@ -20,7 +20,13 @@ PyCharmCE with Anaconda plugin<br>
 
 ## Usage
 
+TODO
+
 ## Install
+
+```
+$ pip install requirements.txt
+```````
 
 ## Contribution
 
